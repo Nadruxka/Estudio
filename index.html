@@ -1,0 +1,320 @@
+<!doctype html>
+<html lang="pt-PT">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Entre Corpo e Mente Studio</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-180.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Estúdio">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="theme-color" content="#FBF8F3">
+<style>
+:root{--sage:#8FA68E;--sage-l:#DCE6DA;--dark:#2F4A3A;--bg:#FBF8F3;--card:#FFFFFF;--beige:#EFE7DA;--text:#25302A;--muted:#6B766F;--line:#E3DCCD;--warn:#B5651D;--warn-bg:#F7E8D3}
+@media(prefers-color-scheme:dark){:root{--sage:#8FA68E;--sage-l:#2C3A31;--dark:#B9D1B8;--bg:#161B18;--card:#1F2622;--beige:#262E29;--text:#ECEFEA;--muted:#9AA79E;--line:#323C35;--warn:#E8B26B;--warn-bg:#3A2F1E}}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",sans-serif;font-size:16px;line-height:1.45}
+body{padding-bottom:calc(76px + env(safe-area-inset-bottom))}
+header{padding:calc(14px + env(safe-area-inset-top)) 18px 6px}
+h1{font-size:1.5rem;margin:0;color:var(--dark);font-weight:700;letter-spacing:-.01em}
+h2{font-size:1.05rem;margin:22px 0 8px;color:var(--dark)}
+.sub{color:var(--muted);font-size:.92rem;margin:2px 0 0}
+main{padding:0 16px 16px;max-width:720px;margin:0 auto}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:14px 16px;margin:10px 0}
+.card.tap{cursor:pointer}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.grow{flex:1;min-width:0}
+.btn{appearance:none;border:0;border-radius:14px;padding:12px 18px;font-size:1rem;font-weight:600;background:var(--dark);color:var(--bg);cursor:pointer;min-height:44px}
+.btn.sec{background:var(--sage-l);color:var(--dark)}
+.btn.danger{background:var(--warn-bg);color:var(--warn)}
+.btn.big{width:100%;padding:16px;font-size:1.1rem;margin:6px 0}
+.btn.sm{padding:8px 12px;font-size:.9rem;min-height:36px;border-radius:12px}
+.tag{display:inline-block;padding:3px 10px;border-radius:99px;font-size:.78rem;background:var(--sage-l);color:var(--dark);margin:2px 4px 2px 0}
+.tag.warn{background:var(--warn-bg);color:var(--warn)}
+.muted{color:var(--muted)}
+.empty{color:var(--muted);font-size:.92rem;padding:4px 0}
+.title{font-weight:650}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.stat{background:var(--beige);border-radius:14px;padding:10px;text-align:center}
+.stat b{display:block;font-size:1.4rem;color:var(--dark)}
+.stat span{font-size:.75rem;color:var(--muted)}
+nav{position:fixed;left:0;right:0;bottom:0;background:var(--card);border-top:1px solid var(--line);display:flex;padding:6px 6px calc(6px + env(safe-area-inset-bottom));z-index:5}
+nav button{flex:1;appearance:none;border:0;background:none;color:var(--muted);font-size:.7rem;padding:6px 2px;display:flex;flex-direction:column;align-items:center;gap:2px;min-height:48px;cursor:pointer}
+nav button .ic{font-size:1.3rem;line-height:1}
+nav button.on{color:var(--dark);font-weight:700}
+label{display:block;font-size:.85rem;color:var(--muted);margin:12px 0 4px}
+input,select,textarea{width:100%;font:inherit;font-size:16px;color:var(--text);background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:11px 12px}
+textarea{min-height:110px;resize:vertical}
+.sheet{position:fixed;inset:0;background:var(--bg);z-index:10;overflow-y:auto;padding:calc(12px + env(safe-area-inset-top)) 16px calc(30px + env(safe-area-inset-bottom))}
+.sheet-in{max-width:720px;margin:0 auto}
+.kanban{display:flex;gap:12px;overflow-x:auto;padding:4px 16px 16px;margin:0 -16px;scroll-snap-type:x mandatory}
+.col{flex:0 0 82%;max-width:320px;background:var(--beige);border-radius:18px;padding:10px;scroll-snap-align:start}
+.col h3{margin:4px 6px 8px;font-size:.95rem;color:var(--dark)}
+.col .card{margin:8px 0}
+.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;text-align:center}
+.cal .dh{font-size:.72rem;color:var(--muted)}
+.day{aspect-ratio:1;border-radius:12px;background:var(--card);border:1px solid var(--line);display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:.9rem;cursor:pointer;color:var(--text)}
+.day.out{opacity:.3}.day.today{border-color:var(--sage);border-width:2px}.day.sel{background:var(--dark);color:var(--bg)}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--sage);margin-top:2px}
+.day.sel .dot{background:var(--bg)}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(90px + env(safe-area-inset-bottom));background:var(--dark);color:var(--bg);padding:10px 16px;border-radius:14px;z-index:20;font-size:.9rem;max-width:90%}
+pre{white-space:pre-wrap;word-wrap:break-word;background:var(--beige);border-radius:12px;padding:12px;font-size:.85rem;max-height:40vh;overflow:auto}
+.note{background:var(--warn-bg);color:var(--warn);border-radius:12px;padding:10px 12px;font-size:.88rem;margin:10px 0}
+</style>
+</head>
+<body>
+<header><h1 id="h-title"></h1><p class="sub" id="h-sub"></p></header>
+<main id="view"></main>
+<nav id="nav"></nav>
+<div id="overlay"></div>
+
+<script>
+"use strict";
+const KEY="ecm_studio_v1";
+const STATES=["Ideia","Em investigação","Em produção","Pendente de verificação factual","Em revisão","Aprovado","Agendado","Publicado","Arquivado"];
+const TYPES=["Reel","Carrossel","Story","Publicação informativa","Outro"];
+const PLATFORMS=["Instagram","Facebook","Instagram e Facebook"];
+const PROFILES=["Pessoal e intimista","Sarcástico e crítico","Informativo e científico","Jurídico e institucional","Educativo e acessível","Leve e descontraído"];
+const MONTHS=["janeiro","fevereiro","março","abril","maio","junho","julho","agosto","setembro","outubro","novembro","dezembro"];
+const TABS=[["estudio","🌿","Estúdio"],["conteudos","📚","Conteúdos"],["quadro","🗂️","Quadro"],["calendario","📅","Calendário"],["mais","⚙️","Mais"]];
+
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,7);
+const pad=n=>String(n).padStart(2,"0");
+const iso=d=>`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+const fmt=s=>{if(!s)return"";const[y,m,d]=s.split("-");return`${+d} de ${MONTHS[m-1]}`};
+
+function load(){
+  try{const r=JSON.parse(localStorage.getItem(KEY));if(r&&Array.isArray(r.contents)){r.voice=r.voice||{};r.voice.perfis=r.voice.perfis||{};return r}}catch(e){}
+  return{contents:[],voice:{geral:"",evitar:"",exemplos:"",perfis:{}}};
+}
+let db=load(),tab="estudio",calMonth=new Date(),calSel=iso(new Date()),filt="Todos";
+function save(){try{localStorage.setItem(KEY,JSON.stringify(db));return true}catch(e){toast("Não foi possível guardar. Exporta os teus dados em «Mais».");return false}}
+function toast(m){const t=document.createElement("div");t.className="toast";t.textContent=m;document.body.appendChild(t);setTimeout(()=>t.remove(),3200)}
+const byId=id=>db.contents.find(c=>c.id===id);
+
+/* ---------- Navegação ---------- */
+function renderNav(){$("#nav").innerHTML=TABS.map(([k,i,l])=>`<button class="${tab===k?"on":""}" data-a="tab" data-v="${k}" aria-label="${l}"><span class="ic">${i}</span>${l}</button>`).join("")}
+const $=s=>document.querySelector(s);
+function render(){
+  renderNav();
+  const v=$("#view");
+  const R={estudio:viewEstudio,conteudos:viewConteudos,quadro:viewQuadro,calendario:viewCalendario,mais:viewMais}[tab];
+  R(v);
+}
+function head(t,s){$("#h-title").textContent=t;$("#h-sub").textContent=s||""}
+
+/* ---------- Estúdio ---------- */
+function viewEstudio(v){
+  const h=new Date().getHours();
+  const sauda=h<6?"Boa noite":h<13?"Bom dia":h<20?"Boa tarde":"Boa noite";
+  const hoje=new Date();
+  head(`${sauda}, Nádia`,`${hoje.getDate()} de ${MONTHS[hoje.getMonth()]} de ${hoje.getFullYear()}`);
+  const C=db.contents, n=s=>C.filter(c=>c.estado===s).length;
+  const pend=C.filter(c=>c.estado==="Em revisão"||c.estado==="Pendente de verificação factual");
+  const agend=C.filter(c=>c.estado==="Agendado"&&c.data).sort((a,b)=>a.data.localeCompare(b.data));
+  const verif=C.filter(c=>c.estado==="Pendente de verificação factual");
+  let prio;
+  if(verif.length)prio=`Verificar factualmente «${esc(verif[0].titulo)}» antes de avançar.`;
+  else if(n("Em revisão"))prio=`Rever e decidir «${esc(C.find(c=>c.estado==="Em revisão").titulo)}».`;
+  else if(n("Em produção"))prio=`Concluir «${esc(C.find(c=>c.estado==="Em produção").titulo)}».`;
+  else if(n("Ideia"))prio=`Escolher uma das ${n("Ideia")} ideias e passá-la a investigação.`;
+  else prio="Ainda não tens conteúdos. Começa por preparar um.";
+  v.innerHTML=`
+  <button class="btn big" data-a="preparar">✨ Preparar conteúdos</button>
+  <div class="card"><div class="stats">
+    <div class="stat"><b>${n("Ideia")+n("Em investigação")}</b><span>Ideias e pesquisa</span></div>
+    <div class="stat"><b>${n("Em produção")}</b><span>Em produção</span></div>
+    <div class="stat"><b>${pend.length}</b><span>Para aprovar</span></div></div></div>
+  <h2>Ação prioritária</h2><div class="card">${prio}</div>
+  <h2>Pendentes de aprovação</h2>
+  ${pend.length?pend.map(cardMini).join(""):`<div class="card empty">Nada pendente.</div>`}
+  <h2>Publicações agendadas</h2>
+  ${agend.length?agend.slice(0,5).map(cardMini).join(""):`<div class="card empty">Sem publicações agendadas.</div>`}
+  <h2>Tendências, comunidade e desempenho</h2>
+  <div class="card empty">Estas áreas só terão dados reais depois de ligarmos o Instagram, o Facebook e as fontes de notícias (fases seguintes). Até lá não mostro números nem tendências inventados.</div>`;
+}
+function cardMini(c){return`<div class="card tap" data-a="abrir" data-v="${c.id}"><div class="title">${esc(c.titulo)}</div><div class="muted" style="font-size:.85rem">${esc(c.tipo)}${c.data?" · "+fmt(c.data):""}</div>${tagEstado(c)}</div>`}
+function tagEstado(c){return`<span class="tag ${c.estado==="Pendente de verificação factual"?"warn":""}">${esc(c.estado)}</span>`}
+
+/* ---------- Conteúdos ---------- */
+function viewConteudos(v){
+  head("Conteúdos","A tua biblioteca");
+  const list=db.contents.filter(c=>filt==="Todos"||c.estado===filt).sort((a,b)=>(b.criado||0)-(a.criado||0));
+  v.innerHTML=`<div class="row"><select data-a="filtro" style="flex:1">${["Todos",...STATES].map(s=>`<option ${s===filt?"selected":""}>${s}</option>`).join("")}</select>
+  <button class="btn" data-a="novo">+ Novo</button></div>
+  ${list.length?list.map(cardMini).join(""):`<div class="card empty">Ainda não há conteúdos${filt!=="Todos"?" neste estado":""}. Usa «+ Novo» ou «Preparar conteúdos» no Estúdio.</div>`}`;
+}
+
+/* ---------- Quadro (Kanban) ---------- */
+function viewQuadro(v){
+  head("Quadro","Toca num cartão para editar; usa ‹ › para o mover de estado");
+  v.innerHTML=`<div class="kanban">${STATES.map((s,i)=>{
+    const L=db.contents.filter(c=>c.estado===s);
+    return`<div class="col"><h3>${s} <span class="muted">(${L.length})</span></h3>
+    ${L.map(c=>`<div class="card"><div class="tap" data-a="abrir" data-v="${c.id}"><div class="title">${esc(c.titulo)}</div><div class="muted" style="font-size:.82rem">${esc(c.tipo)}${c.data?" · "+fmt(c.data):""}</div></div>
+    <div class="row" style="margin-top:8px"><button class="btn sec sm" data-a="mover" data-v="${c.id}" data-d="-1" ${i===0?"disabled":""} aria-label="Estado anterior">‹</button>
+    <div class="grow"></div><button class="btn sec sm" data-a="mover" data-v="${c.id}" data-d="1" ${i===STATES.length-1?"disabled":""} aria-label="Estado seguinte">›</button></div></div>`).join("")||`<div class="empty">Vazio</div>`}</div>`}).join("")}</div>`;
+}
+
+/* ---------- Calendário ---------- */
+function viewCalendario(v){
+  head("Calendário","Datas previstas de publicação");
+  const y=calMonth.getFullYear(),m=calMonth.getMonth();
+  const first=new Date(y,m,1),start=(first.getDay()+6)%7,days=new Date(y,m+1,0).getDate();
+  const has={};db.contents.forEach(c=>{if(c.data)has[c.data]=(has[c.data]||0)+1});
+  let cells="";for(let i=0;i<start;i++)cells+=`<div></div>`;
+  for(let d=1;d<=days;d++){const k=`${y}-${pad(m+1)}-${pad(d)}`;
+    cells+=`<button class="day ${k===iso(new Date())?"today":""} ${k===calSel?"sel":""}" data-a="dia" data-v="${k}">${d}${has[k]?`<span class="dot"></span>`:""}</button>`}
+  const doDia=db.contents.filter(c=>c.data===calSel);
+  v.innerHTML=`<div class="row"><button class="btn sec sm" data-a="mes" data-v="-1" aria-label="Mês anterior">‹</button><div class="grow title" style="text-align:center">${MONTHS[m]} de ${y}</div><button class="btn sec sm" data-a="mes" data-v="1" aria-label="Mês seguinte">›</button></div>
+  <div class="cal" style="margin-top:10px">${["S","T","Q","Q","S","S","D"].map(x=>`<div class="dh">${x}</div>`).join("")}${cells}</div>
+  <h2>${fmt(calSel)}</h2>${doDia.length?doDia.map(cardMini).join(""):`<div class="card empty">Nada previsto para este dia.</div>`}
+  <button class="btn sec" data-a="novo" data-d="${calSel}">+ Novo conteúdo neste dia</button>`;
+}
+
+/* ---------- Mais: A minha voz + Definições ---------- */
+function viewMais(v){
+  head("Mais","A minha voz, dados e definições");
+  const V=db.voice;
+  v.innerHTML=`<h2>A minha voz</h2>
+  <div class="card"><p class="muted" style="margin-top:0">Quanto mais descreveres e exemplificares, melhores serão os pedidos que preparo para a IA. Só escrevo aqui o que tu fornecires.</p>
+  <label>Como escrevo (vocabulário, formalidade, humor, sarcasmo)</label><textarea id="v-geral">${esc(V.geral)}</textarea>
+  <label>O que nunca quero (expressões, tom, temas)</label><textarea id="v-evitar">${esc(V.evitar)}</textarea>
+  <label>Textos meus de exemplo (cola publicações anteriores)</label><textarea id="v-ex" style="min-height:180px">${esc(V.exemplos)}</textarea>
+  <h2 style="margin-top:18px">Perfis editoriais</h2>
+  ${PROFILES.map((p,i)=>`<label>${p}</label><textarea class="v-perfil" data-i="${i}" style="min-height:70px" placeholder="Notas tuas sobre como queres este perfil">${esc(V.perfis[i]||"")}</textarea>`).join("")}
+  <button class="btn" style="margin-top:14px" data-a="gvoz">Guardar a minha voz</button></div>
+  <h2>Os meus dados</h2>
+  <div class="card"><p class="muted" style="margin-top:0">Tudo fica guardado só neste dispositivo. Faz cópias de segurança com regularidade.</p>
+  <div class="row"><button class="btn sec" data-a="exportar">Exportar tudo</button>
+  <button class="btn sec" data-a="importar">Importar</button><button class="btn danger" data-a="apagar">Apagar tudo</button></div>
+  <input type="file" id="file" accept="application/json" hidden></div>
+  <h2>Sobre esta versão</h2><div class="card muted" style="font-size:.9rem">Versão 1: conteúdos, quadro, calendário, voz e preparação de pedidos para a IA. Ainda sem ligação ao Instagram/Facebook e sem sincronização entre dispositivos. Segue o modo claro/escuro do iPhone. Nada é publicado automaticamente.</div>`;
+}
+
+/* ---------- Editor ---------- */
+function openEditor(id,presetDate,preset){
+  const c=id?byId(id):Object.assign({id:"",titulo:"",tipo:"Reel",tema:"",objetivo:"",texto:"",visuais:"",fontes:"",data:presetDate||"",plataforma:"Instagram",estado:"Ideia",notas:"",resultados:""},preset||{});
+  const opt=(arr,val)=>arr.map(o=>`<option ${o===val?"selected":""}>${esc(o)}</option>`).join("");
+  $("#overlay").innerHTML=`<div class="sheet"><div class="sheet-in">
+  <div class="row"><button class="btn sec sm" data-a="fechar">← Voltar</button><div class="grow"></div>${id?`<button class="btn danger sm" data-a="eliminar" data-v="${id}">Eliminar</button>`:""}</div>
+  <h1 style="margin-top:12px">${id?"Editar conteúdo":"Novo conteúdo"}</h1>
+  <label>Título</label><input id="e-titulo" value="${esc(c.titulo)}">
+  <label>Tipo</label><select id="e-tipo">${opt(TYPES,c.tipo)}</select>
+  <label>Estado</label><select id="e-estado">${opt(STATES,c.estado)}</select>
+  <label>Plataforma</label><select id="e-plat">${opt(PLATFORMS,c.plataforma)}</select>
+  <label>Data prevista</label><input type="date" id="e-data" value="${esc(c.data)}">
+  <label>Tema</label><input id="e-tema" value="${esc(c.tema)}">
+  <label>Objetivo</label><input id="e-obj" value="${esc(c.objetivo)}">
+  <label>Texto (guião, legenda, slides…)</label><textarea id="e-texto" style="min-height:240px">${esc(c.texto)}</textarea>
+  <label>Recursos visuais</label><textarea id="e-vis" style="min-height:70px">${esc(c.visuais)}</textarea>
+  <label>Fontes (autor, data, ligação — só o que for verificável)</label><textarea id="e-fontes" style="min-height:90px">${esc(c.fontes)}</textarea>
+  <label>Notas</label><textarea id="e-notas" style="min-height:70px">${esc(c.notas)}</textarea>
+  <label>Resultados após publicação (alcance, guardados, partilhas…)</label><textarea id="e-res" style="min-height:70px">${esc(c.resultados)}</textarea>
+  <div class="note">Conteúdos de saúde e direitos: confirma fontes e legislação antes de passar a «Aprovado». Usa o estado «Pendente de verificação factual» enquanto não confirmares.</div>
+  <button class="btn big" data-a="gravar" data-v="${id||""}">Guardar</button>
+  </div></div>`;
+  $("#overlay").firstChild.scrollTop=0;
+}
+function gravar(id){
+  const t=$("#e-titulo").value.trim();
+  if(!t){toast("Falta o título.");return}
+  const o={titulo:t,tipo:$("#e-tipo").value,estado:$("#e-estado").value,plataforma:$("#e-plat").value,data:$("#e-data").value,tema:$("#e-tema").value.trim(),objetivo:$("#e-obj").value.trim(),texto:$("#e-texto").value,visuais:$("#e-vis").value,fontes:$("#e-fontes").value,notas:$("#e-notas").value,resultados:$("#e-res").value};
+  if(o.estado==="Agendado"&&!o.data){toast("Para «Agendado» indica a data prevista.");return}
+  if(id){Object.assign(byId(id),o,{atualizado:Date.now()})}
+  else db.contents.push(Object.assign({id:uid(),criado:Date.now(),atualizado:Date.now()},o));
+  if(save()){$("#overlay").innerHTML="";toast("Guardado.");render()}
+}
+
+/* ---------- Preparar conteúdos (pedido para a IA) ---------- */
+function openPreparar(){
+  $("#overlay").innerHTML=`<div class="sheet"><div class="sheet-in">
+  <button class="btn sec sm" data-a="fechar">← Voltar</button>
+  <h1 style="margin-top:12px">Preparar conteúdos</h1>
+  <p class="muted">Cria um pedido completo, com a tua voz e as regras de rigor, para colares no Claude. Depois colas aqui a resposta e ela fica guardada como ideia.</p>
+  <label>Tipo de conteúdo</label><select id="p-tipo">${TYPES.slice(0,4).map(t=>`<option>${t}</option>`).join("")}</select>
+  <label>Perfil editorial</label><select id="p-perfil">${PROFILES.map(t=>`<option>${t}</option>`).join("")}</select>
+  <label>Tema ou ideia</label><textarea id="p-tema" style="min-height:80px" placeholder="Ex.: o que fazer quando a junta médica…"></textarea>
+  <label>Contexto extra (opcional: comentário de uma seguidora sem dados pessoais, notícia, link)</label><textarea id="p-ctx" style="min-height:80px"></textarea>
+  <button class="btn big" data-a="gerarPedido">Gerar pedido</button>
+  <div id="p-out"></div>
+  <h2>Colar a resposta</h2>
+  <label>Título para guardar</label><input id="p-titulo">
+  <label>Resposta do Claude</label><textarea id="p-resp" style="min-height:160px"></textarea>
+  <button class="btn sec big" data-a="guardarResp">Guardar como ideia (pendente de verificação)</button>
+  </div></div>`;
+}
+function montarPedido(){
+  const V=db.voice,tipo=$("#p-tipo").value,pi=$("#p-perfil").selectedIndex,perfil=PROFILES[pi],tema=$("#p-tema").value.trim(),ctx=$("#p-ctx").value.trim();
+  const estr={"Reel":"ideia central; hook inicial; guião completo; texto para voz-off; sugestões de planos; texto no ecrã; duração estimada; legenda; CTA; sugestão de capa.","Carrossel":"título de impacto; estrutura slide a slide com texto conciso; sugestões visuais; legenda; CTA; referências.","Story":"sequência curta de stories com texto, pergunta, sondagem ou quiz e estratégia de interação.","Publicação informativa":"explicação acessível; contexto científico ou jurídico; referências verificáveis; limitações da evidência; alertas sobre informação desatualizada."}[tipo];
+  return`Atua como assistente editorial do projeto @entre.corpo.e.mente: comunicação portuguesa sobre esclerose múltipla, fibromialgia, doenças crónicas e autoimunes, dor crónica, saúde mental, direitos das pessoas com doença crónica e deficiência em Portugal, inclusão, neurodivergência, maternidade e advocacy. Escreve em português de Portugal.
+
+TAREFA: preparar um(a) ${tipo}.
+PERFIL EDITORIAL: ${perfil}${V.perfis[pi]?` — ${V.perfis[pi]}`:""}
+TEMA: ${tema||"(propõe 3 ideias estrategicamente fundamentadas)"}
+${ctx?`CONTEXTO: ${ctx}\n`:""}
+A MINHA VOZ: ${V.geral||"(não definida; autêntica, próxima, rigorosa, empática, com sarcasmo e humor quando apropriado)"}
+EVITAR: ${V.evitar||"(texto motivacional genérico, linguagem de marketing vazia, português do Brasil)"}
+${V.exemplos?`EXEMPLOS DE TEXTOS MEUS:\n${V.exemplos}\n`:""}
+ESTRUTURA PEDIDA: ${estr}
+
+REGRAS OBRIGATÓRIAS:
+- Não inventes experiências pessoais, acontecimentos familiares nem opiniões que eu não tenha fornecido; deixa [ESPAÇO PARA A MINHA EXPERIÊNCIA] onde fizer sentido.
+- Não inventes referências, estudos, citações, legislação ou decisões judiciais. Indica apenas fontes que consigas confirmar (autor, data, ligação) e identifica diplomas e artigos aplicáveis em vigor em Portugal.
+- Assinala com [VERIFICAR] tudo o que exija confirmação humana e distingue estudos preliminares de evidência consolidada.
+- Não ofereças aconselhamento médico individual.
+- Entrega texto editável, por secções, para eu poder pedir a regeneração de partes.`;
+}
+function guardarResp(){
+  const r=$("#p-resp").value.trim(),t=$("#p-titulo").value.trim()||$("#p-tema").value.trim().slice(0,70);
+  if(!r){toast("Cola primeiro a resposta.");return}
+  if(!t){toast("Indica um título.");return}
+  db.contents.push({id:uid(),criado:Date.now(),atualizado:Date.now(),titulo:t,tipo:$("#p-tipo").value,tema:$("#p-tema").value.trim(),objetivo:"",texto:r,visuais:"",fontes:"",data:"",plataforma:"Instagram",estado:"Pendente de verificação factual",notas:"Perfil: "+$("#p-perfil").value,resultados:""});
+  if(save()){$("#overlay").innerHTML="";tab="conteudos";filt="Todos";toast("Guardado.");render()}
+}
+
+/* ---------- Eventos ---------- */
+document.addEventListener("click",async e=>{
+  const el=e.target.closest("[data-a]");if(!el)return;
+  const a=el.dataset.a,v=el.dataset.v;
+  switch(a){
+    case"tab":tab=v;render();window.scrollTo(0,0);break;
+    case"abrir":openEditor(v);break;
+    case"novo":openEditor(null,el.dataset.d);break;
+    case"fechar":$("#overlay").innerHTML="";render();break;
+    case"gravar":gravar(v);break;
+    case"eliminar":if(confirm("Eliminar este conteúdo? Não é possível desfazer.")){db.contents=db.contents.filter(c=>c.id!==v);save();$("#overlay").innerHTML="";render();toast("Eliminado.")}break;
+    case"mover":{const c=byId(v),i=STATES.indexOf(c.estado)+(+el.dataset.d);
+      if(i<0||i>=STATES.length)break;
+      if(STATES[i]==="Agendado"&&!c.data){toast("Define primeiro a data prevista no conteúdo.");break}
+      c.estado=STATES[i];c.atualizado=Date.now();save();render();break}
+    case"dia":calSel=v;render();break;
+    case"mes":calMonth=new Date(calMonth.getFullYear(),calMonth.getMonth()+(+v),1);render();break;
+    case"preparar":openPreparar();break;
+    case"gerarPedido":{const t=montarPedido();$("#p-out").innerHTML=`<pre id="p-txt">${esc(t)}</pre><div class="row"><button class="btn" data-a="copiar">Copiar pedido</button></div>`;window._pedido=t;break}
+    case"copiar":try{await navigator.clipboard.writeText(window._pedido);toast("Copiado. Cola no Claude.")}catch(_){const r=document.createRange();r.selectNodeContents($("#p-txt"));const s=getSelection();s.removeAllRanges();s.addRange(r);toast("Seleciona e copia manualmente.")}break;
+    case"guardarResp":guardarResp();break;
+    case"gvoz":db.voice.geral=$("#v-geral").value;db.voice.evitar=$("#v-evitar").value;db.voice.exemplos=$("#v-ex").value;document.querySelectorAll(".v-perfil").forEach(t=>{db.voice.perfis[t.dataset.i]=t.value});if(save())toast("Voz guardada.");break;
+    case"exportar":{const b=new Blob([JSON.stringify({versao:1,exportado:new Date().toISOString(),...db},null,2)],{type:"application/json"});const u=URL.createObjectURL(b);const l=document.createElement("a");l.href=u;l.download=`entre-corpo-e-mente-${iso(new Date())}.json`;document.body.appendChild(l);l.click();l.remove();setTimeout(()=>URL.revokeObjectURL(u),2000);break}
+    case"importar":$("#file").click();break;
+    case"apagar":if(confirm("Apagar TODOS os conteúdos e a tua voz deste dispositivo? Faz primeiro uma exportação.")&&confirm("Tens a certeza? Esta ação é definitiva.")){db={contents:[],voice:{geral:"",evitar:"",exemplos:"",perfis:{}}};save();render();toast("Dados apagados.")}break;
+  }
+});
+document.addEventListener("change",e=>{
+  if(e.target.dataset.a==="filtro"){filt=e.target.value;render()}
+  if(e.target.id==="file"){const f=e.target.files[0];if(!f)return;const r=new FileReader();
+    r.onload=()=>{try{const d=JSON.parse(r.result);if(!Array.isArray(d.contents))throw 0;
+      if(!confirm(`Importar ${d.contents.length} conteúdos? Os atuais serão substituídos.`))return;
+      db={contents:d.contents,voice:Object.assign({geral:"",evitar:"",exemplos:"",perfis:{}},d.voice||{})};save();render();toast("Importado.")}catch(_){toast("Ficheiro inválido.")}};
+    r.readAsText(f)}
+});
+
+if(navigator.storage&&navigator.storage.persist)navigator.storage.persist().catch(()=>{});
+if("serviceWorker" in navigator)window.addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));
+render();
+</script>
+</body>
+</html>
